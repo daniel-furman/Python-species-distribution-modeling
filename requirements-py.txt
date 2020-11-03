@@ -1,0 +1,9 @@
+scikit-learn==0.23.2
+rasterio==1.1.8
+geopandas==0.8.1
+glob2==0.7
+pytest-shutil==1.7.0
+pyimpute==0.2
+pylab
+xgboost==1.2.1
+lightbgm==3.0.0
