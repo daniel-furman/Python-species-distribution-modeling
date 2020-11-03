@@ -1,6 +1,6 @@
 ### Species Distribution Models in Python
 ---
-See the **<a target="_blank" rel="noopener noreferrer" href="https://daniel-furman.github.io/py-sdms-tutorial/">link to tutorial</a>**.
+See the **<a target="_blank" rel="noopener noreferrer" href="https://daniel-furman.github.io/py-sdms-tutorial/">*tutorial link*</a>**.
 
 ### Requirements
 
