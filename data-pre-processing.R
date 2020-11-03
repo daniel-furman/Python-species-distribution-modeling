@@ -3,18 +3,14 @@
 #' title: "sdms_data_piping"
 #' author: "Daniel Furman"
 #' date: "2020"
-#' #' ---
+#' ---
 #' 
 #' This R script pipes presence and absence data for joshua trees
 #' 
 #' Data citation:
 #' GBIF.org (01 November 2020) GBIF Occurrence
 #' Download https://doi.org/10.15468/dl.g6swrm 
-
 ## ------------------------------------------------------------------------
-
-# Libraries needed for this file, download all dependencies from 
-# requirements-R.txt
 
 library(raster)
 library(rgdal)
@@ -24,9 +20,8 @@ library(maptools)
 ## ------------------------------------------------------------------------
 
 # pipe GBIF data
-jt_raw <- read.csv('data/jtree_GBIF_raw.csv', header = TRUE) # grab GBIF
+jt_raw <- read.csv('data/GBIF_raw.csv', header = TRUE) # grab GBIF
 jt_raw <- jt_raw[which(jt_raw$countryCode=='US'),] # restrict to US
-
 jt <- data.frame(matrix(ncol = 2, nrow = length(jt_raw$decimalLongitude)))
 jt[,1] <- jt_raw$decimalLongitude
 jt[,2] <- jt_raw$decimalLatitude
@@ -61,8 +56,11 @@ train <- data.frame(cbind(CLASS=pa_train, train)) # final dataframe
  
 # create spatial points
 crs <- crs(bioclim.data[[1]])
-dataMap.jt  <- SpatialPointsDataFrame(train[,c(2,3)], train, proj4string =crs)
-
+train <- train[sample(nrow(train)),]
+class.pa <- data.frame(train[,1])
+colnames(class.pa) <- 'CLASS'
+dataMap.jt  <- SpatialPointsDataFrame(train[,c(2,3)], class.pa,
+                                      proj4string =crs)
 # write as shp
 writeOGR(dataMap.jt, 'data/jtree.shp','jtree', driver='ESRI Shapefile')
 
