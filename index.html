@@ -13077,19 +13077,19 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="An-introduction-to-Species-Distribution-Models-in-Python">An introduction to Species Distribution Models in Python<a class="anchor-link" href="#An-introduction-to-Species-Distribution-Models-in-Python">&#182;</a></h2><p><em>Predicting spatial distributions for ecological species leveraging Python's ever-strengthening machine learning stack.</em></p>
+<h1 id="A-brief-introduction-to-Species-Distribution-Models-in-Python">A brief introduction to Species Distribution Models in Python<a class="anchor-link" href="#A-brief-introduction-to-Species-Distribution-Models-in-Python">&#182;</a></h1><p><em>Predicting spatial distributions for ecological species leveraging Python's ever-strengthening machine learning stack.</em></p>
 <hr>
 <p><strong>Author : <a href="mailto:dryanfurman@gmail.com">Daniel Furman</a></strong> | November 2020</p>
 <hr>
-<p><strong><em>Species Distributions Models (SDMs)</em></strong> are an important and widely used tool for ecologists, agriculture scientists, conservation biologists, and many other geospatial science enthusiasts. While dozens of tutorials leverage the traditional R SDM stack, with packages such as Raster and dismo, (e.g. Robert J. Hijmans and Jane Elith's comprehensive "Species distribution modeling with R"), implementations of SDMs in Python are, <strong><em>surprisingly</em></strong>, rather limited. To bridge this gap, we will begin to explore a SDM workflow <strong><em>powered by Python's machine learning capabilities</em></strong>. However, the methods we employ just barely scratch the surface of available techniques, and hopefully this introduction can serve as a springboard to further exploration.</p>
+<p><strong><em>Species Distributions Models (SDMs)</em></strong> are an important and widely used tool for ecologists, agriculture scientists, conservation biologists, and many other geospatial science enthusiasts. While dozens of tutorials leverage the traditional R stack for SDMs, with packages such as Raster, implementations of SDMs in Python are, <strong><em>surprisingly</em></strong>, rather limited. To bridge this gap, we explore a SDM workflow powered by Python's machine learning capabilities. The methods employed barely scratch the surface of available techniques, and hopefully this introduction can serve as a springboard to further exploration.</p>
 <p>If you are completely new to SDMs, it may be prudent to start <a target="_blank" rel="noopener noreferrer" href="https://www.google.com/search?q=species+distribution+modeling&oq=species+distribution+modeling&aqs=chrome..69i57j35i39j0l3j69i61l2j69i60.6284j0j1&sourceid=chrome&ie=UTF-8">here</a>. SDMs associate presence locations of a species to climate variables, giving you the power to predict species suitability across an entire landscape. First, environmental variables are sampled from presence coordinates. Second, a statistical model (here, SK-Learn classifiers) defines a species-environment relationship. Third, the species–environment relationship is mapped across the study space, denoting a potential distribution of the species (referred to as interpolation).  Projecting to future/past climates or to novel geographic areas is referred to as extrapolation. A typical workflow is as follows:</p>
 <p><code>conceptualization</code> -&gt; <code>data pre-processing</code> -&gt; <code>model training/assessment</code> -&gt; 
 <code>interpolate/extrapolate</code> -&gt; <code>iterate</code></p>
-<h3 id="Tutorial-Objectives">Tutorial Objectives<a class="anchor-link" href="#Tutorial-Objectives">&#182;</a></h3><hr>
+<h2 id="Tutorial-Objectives">Tutorial Objectives<a class="anchor-link" href="#Tutorial-Objectives">&#182;</a></h2><hr>
 <ol>
 <li>Create a SDM workspace with a Python codebase.</li>
 <li>Run a suite of SDMs with your ML classifiers of choice.  </li>
-<li>Visualize model predictions for current climates.</li>
+<li>Visualize model predictions with climate features (1970-2000). </li>
 </ol>
 
 </div>
@@ -13098,8 +13098,8 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Section-1-|-Set-up">Section 1 | Set up<a class="anchor-link" href="#Section-1-|-Set-up">&#182;</a></h3><hr>
-<h3 id="Section-1.1-|-Workspace">Section 1.1 | Workspace<a class="anchor-link" href="#Section-1.1-|-Workspace">&#182;</a></h3><p>The first step is to create <code>inputs</code>/<code>outputs</code> folders in our working file directory. It is best practices to keep the data and results separated, as <code>outputs</code> folder should be completely reproducible.</p>
+<h2 id="Section-1-|-Set-up">Section 1 | Set up<a class="anchor-link" href="#Section-1-|-Set-up">&#182;</a></h2><hr>
+<h3 id="1.1-|-Workspace">1.1 | Workspace<a class="anchor-link" href="#1.1-|-Workspace">&#182;</a></h3><p>The first step is to create <code>inputs</code>/<code>outputs</code> folders in our working file directory. It is best practices to keep the data and results separated, as <code>outputs</code> folder should be completely reproducible.</p>
 
 </div>
 </div>
@@ -13137,7 +13137,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Section-1.2-|-Data-Processing">Section 1.2 | Data Processing<a class="anchor-link" href="#Section-1.2-|-Data-Processing">&#182;</a></h3><p>We first need to download a geodatabase (here we use a <code>.shp</code> file) denoting presence/absence coordinates, which can be directly loaded into Python as a GeoPandas <code>GeoDataFrame</code> (a tabular data structure for geometric data types). Here, the <code>CLASS</code> column is a binary indication of the presence/absence of the species. For this tutorial, we are using Joshua trees (<em>Yucca brevifolia</em>) as the example species:</p>
+<h3 id="1.2-|-Data-Processing">1.2 | Data Processing<a class="anchor-link" href="#1.2-|-Data-Processing">&#182;</a></h3><p>We first need to download a geodatabase (here we use a <code>.shp</code> file) denoting presence/absence coordinates, which can be directly loaded into Python as a GeoPandas <code>GeoDataFrame</code> (a tabular data structure for geometric data types). Here, the <code>CLASS</code> column is a binary indication of the presence/absence of the species. For this tutorial, we are using Joshua trees (<em>Yucca brevifolia</em>) as the example species:</p>
 <p><img src="jtree.jpg" width = 500/></p>
 <p>To follow along chunk by chunk, clone the <a target="_blank" rel="noopener noreferrer" href="https://github.com/daniel-furman/py-sdms-tutorial">Git repo</a> and open <code>Intro-to-SDMs-Py.ipynb</code> in your working directory of choice.</p>
 
@@ -13394,7 +13394,7 @@ Coordinate reference system is: epsg:4326
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>However, if you don't have a geospatial database with presences/absence coordinates, there are some easy steps to create one for <strong><em>virtually any species</em></strong> of interest! You can start by searching the open-data Global Biodiversity Information Facility (<a target="_blank" rel="noopener noreferrer" href="https://www.gbif.org">GBIF</a>), downloading a species database to <code>.csv</code>, and migrating to R to pipe the database to <code>.shp</code> (see <code>data-pre-processing.R</code>) in the <a target="_blank" rel="noopener noreferrer" href="https://github.com/daniel-furman/py-sdms-tutorial">Git repo</a>.</p>
+<p>However, if you don't have a geospatial database with presences/absence coordinates, there are some easy steps to create one for <strong><em>virtually any species</em></strong> of interest! You can start by searching the open-data Global Biodiversity Information Facility (<a target="_blank" rel="noopener noreferrer" href="https://www.gbif.org">GBIF</a>), downloading a species database to <code>.csv</code>, and migrating to R to pipe the database to <code>.shp</code> (e.g. see <code>data-pre-processing.R</code> in the <a target="_blank" rel="noopener noreferrer" href="https://github.com/daniel-furman/py-sdms-tutorial">Git repo</a>  or the additional information section below).</p>
 
 </div>
 </div>
@@ -13676,6 +13676,7 @@ lgbm 5-fold Cross Validation Accuracy: 93.67 (+/- 0.88)
 <li>A book <a target="_blank" rel="noopener noreferrer" href="https://www.amazon.com/Mapping-Species-Distributions-Biodiversity-Conservation/dp/0521700027
 ">on mapping SDMs </a>  (Franklin, 2009)</li>
 <li>A more modern <a target="_blank" rel="noopener noreferrer" href="https://damariszurell.github.io/SDM-Intro/"> SDMs tutorial</a> (Zurell, 2020) </li>
+<li>A study <a target="_blank" rel="noopener noreferrer" href="https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2012.07348.x">on collinearity among model variables</a> (C. F. Dormann et al., 2012) </li>
 </ol>
 
 </div>
